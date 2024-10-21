@@ -4,6 +4,8 @@ from docx.shared import Pt, RGBColor
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import re
+import sys
+import os
 
 def create_word_styles(doc):
     # Name style
@@ -75,6 +77,19 @@ def markdown_to_docx(md_file, docx_file):
     # Save the document
     doc.save(docx_file)
 
-# Usage
-markdown_to_docx('austin_allen_resume.md', 'austin_allen_resume_improved.docx')
-print("Improved resume converted to DOCX as 'austin_allen_resume_improved.docx'")
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python markdown_to_docx.py <input_markdown_file>")
+        sys.exit(1)
+
+    md_file = sys.argv[1]
+    if not os.path.exists(md_file):
+        print(f"Error: File '{md_file}' not found.")
+        sys.exit(1)
+
+    docx_file = os.path.splitext(md_file)[0] + '.docx'
+    markdown_to_docx(md_file, docx_file)
+    print(f"Converted '{md_file}' to '{docx_file}' successfully.")
+
+if __name__ == "__main__":
+    main()
